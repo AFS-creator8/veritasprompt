@@ -193,7 +193,7 @@
             font-size: 14px;
         }
         .technique-list li {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
         .help-note {
             margin-top: 18px;
@@ -234,7 +234,7 @@
                         <strong>Choose a prompt technique</strong>
                         <p>Each technique applies a different cognitive framework used by expert scholars.</p>
                         <ul class="technique-list" id="techniqueHelpList">
-                            <!-- Dynamically populated from techniqueHints object -->
+                            <!-- Dynamically populated with detailed explanations -->
                         </ul>
                     </div>
                 </div>
@@ -334,7 +334,7 @@
         const subscribeBtn = document.getElementById('subscribeBtn');
         const subscribeMessage = document.getElementById('subscribeMessage');
 
-        // Technique hints (used for both inline hint and help accordion)
+        // Technique hints (used for inline hint)
         const techniqueHints = {
             standard: 'Basic structured query with field-specific framework and safety protocols.',
             falsificationist: 'Designs a falsification test. "What would prove this idea wrong?" Ideal for grant proposals.',
@@ -344,20 +344,39 @@
             peerreview: 'Simulates a harsh peer review, generating major concerns and required citations.'
         };
 
-        // Populate help accordion technique list dynamically
+        // Populate help accordion technique list with detailed explanations
         const techniqueHelpList = document.getElementById('techniqueHelpList');
         if (techniqueHelpList) {
-            const techniqueNames = {
-                standard: 'Standard Inquiry',
-                falsificationist: 'Falsificationist',
-                adversarial: 'Adversarial Dialectic',
-                triangulation: 'Methodological Triangulation',
-                genealogy: 'Conceptual Genealogy',
-                peerreview: 'Peer Review Simulation'
+            const techniqueDetails = {
+                standard: {
+                    name: 'Standard Inquiry',
+                    description: 'A clear, structured academic prompt with field‑specific frameworks (e.g., PICO for medicine). Use when you need a reliable starting point for literature reviews or general exploration.'
+                },
+                falsificationist: {
+                    name: 'Falsificationist (Popperian Rigor)',
+                    description: 'Designs a falsification test. Asks "What would prove this idea wrong?" Ideal for grant proposals, hypothesis testing, and identifying methodological weaknesses.'
+                },
+                adversarial: {
+                    name: 'Adversarial Dialectic',
+                    description: 'Forces the AI to argue against itself (Thesis → Antithesis → Synthesis). Best for critical literature reviews, uncovering hidden assumptions, and strengthening arguments.'
+                },
+                triangulation: {
+                    name: 'Methodological Triangulation',
+                    description: 'Examines the topic through quantitative, qualitative, and computational lenses simultaneously. Use for mixed‑methods research or when you need a multidimensional perspective.'
+                },
+                genealogy: {
+                    name: 'Conceptual Genealogy',
+                    description: 'Traces the intellectual history and political baggage of key concepts. Essential for humanities, critical theory, and re‑problematizing taken‑for‑granted terms.'
+                },
+                peerreview: {
+                    name: 'Peer Review Simulation',
+                    description: 'Simulates a harsh peer review (Reviewer #2). Generates major concerns and required citations. Perfect before submitting to a journal or defending a dissertation.'
+                }
             };
-            for (const [key, hint] of Object.entries(techniqueHints)) {
+
+            for (const [key, details] of Object.entries(techniqueDetails)) {
                 const li = document.createElement('li');
-                li.innerHTML = `<strong>${techniqueNames[key] || key}:</strong> ${hint}`;
+                li.innerHTML = `<strong>${details.name}:</strong> ${details.description}`;
                 techniqueHelpList.appendChild(li);
             }
         }
@@ -430,10 +449,11 @@
             });
         });
 
-        // Email subscription with Netlify Forms (AJAX)
+        /* 
+        // Email subscription with Netlify Forms (AJAX) - commented out to rely on native Netlify Forms
         emailForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            /*const email = emailInput.value.trim();
+            const email = emailInput.value.trim();
             
             if (!email || !email.includes('@')) {
                 subscribeMessage.textContent = 'Please enter a valid email address.';
@@ -464,7 +484,7 @@
                 subscribeBtn.innerHTML = 'Notify Me';
             }
         });
-*/
+        */
 
         // Keyboard shortcut: Ctrl+Enter to generate
         topicInput.addEventListener('keydown', (e) => {
