@@ -134,7 +134,7 @@
             </select>
         </div>
 
-        <!-- Sophistication Mode (NEW) -->
+        <!-- Sophistication Mode -->
         <div class="form-group">
             <label for="technique">🧠 Prompt Technique</label>
             <select id="technique">
@@ -169,14 +169,14 @@
             </div>
         </div>
 
-       <!-- Email Signup with Netlify Forms -->
+        <!-- Email Signup with Netlify Forms -->
         <div class="email-section">
-           <h3>🚀 Get Early Access to Pro Features</h3>
-           <p>Automated citation verification, advanced technique library, and provenance reports. Join the waitlist.</p>
-           <form name="waitlist" method="POST" data-netlify="true" class="email-form">
+            <h3>🚀 Get Early Access to Pro Features</h3>
+            <p>Automated citation verification, advanced technique library, and provenance reports. Join the waitlist.</p>
+            <form name="waitlist" method="POST" data-netlify="true" id="emailForm" class="email-form">
                 <input type="hidden" name="form-name" value="waitlist" />
                 <input type="email" name="email" id="emailInput" placeholder="your.email@university.edu" required>
-              <button type="submit" id="subscribeBtn">Notify Me</button>
+                <button type="submit" id="subscribeBtn">Notify Me</button>
             </form>
             <div id="subscribeMessage" class="success-message"></div>
         </div>
@@ -187,9 +187,8 @@
     </div>
 
     <script>
-        // API endpoints
+        // API endpoint for prompt generation
         const GENERATE_URL = '/.netlify/functions/generate';
-        const SUBSCRIBE_URL = '/.netlify/functions/subscribe';
 
         // DOM elements
         const fieldSelect = document.getElementById('field');
@@ -207,7 +206,7 @@
         const subscribeBtn = document.getElementById('subscribeBtn');
         const subscribeMessage = document.getElementById('subscribeMessage');
 
-        // Technique descriptions for the hint
+        // Technique hints
         const techniqueHints = {
             standard: 'Basic structured query with field-specific framework and safety protocols.',
             falsificationist: 'Designs a falsification test. "What would prove this idea wrong?" Ideal for grant proposals.',
@@ -230,7 +229,7 @@
             comp: '🔍 Verify benchmarks on Papers with Code. Check arXiv for recent preprints.'
         };
 
-        // Generate prompt
+        // Generate prompt function
         async function generatePrompt() {
             const field = fieldSelect.value;
             const technique = techniqueSelect.value;
@@ -284,10 +283,42 @@
             });
         });
 
-        // Email subscription
-        
+        // Email subscription with Netlify Forms (AJAX)
+        emailForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = emailInput.value.trim();
+            
+            if (!email || !email.includes('@')) {
+                subscribeMessage.textContent = 'Please enter a valid email address.';
+                subscribeMessage.style.color = '#dc2626';
+                return;
+            }
 
-        // Keyboard shortcut
+            subscribeBtn.disabled = true;
+            subscribeBtn.innerHTML = 'Subscribing...';
+            subscribeMessage.textContent = '';
+            subscribeMessage.style.color = '#16a34a';
+
+            const formData = new FormData(emailForm);
+            try {
+                await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(formData).toString()
+                });
+                subscribeMessage.textContent = '✅ Thanks! You\'re on the waitlist.';
+                subscribeMessage.style.color = '#16a34a';
+                emailInput.value = '';
+            } catch (err) {
+                subscribeMessage.textContent = 'Error. Please try again.';
+                subscribeMessage.style.color = '#dc2626';
+            } finally {
+                subscribeBtn.disabled = false;
+                subscribeBtn.innerHTML = 'Notify Me';
+            }
+        });
+
+        // Keyboard shortcut: Ctrl+Enter to generate
         topicInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && e.ctrlKey) generatePrompt();
         });
