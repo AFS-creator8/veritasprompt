@@ -16,7 +16,7 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 800px;
+            max-width: 850px;
             width: 100%;
             background: white;
             padding: 30px;
@@ -91,6 +91,21 @@
             font-size: 14px;
             color: #78350f;
         }
+        .tool-suggestion {
+            margin-top: 16px;
+            padding: 14px 18px;
+            background: #e0f2fe;
+            border-left: 4px solid #0284c7;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #0c4a6e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tool-suggestion strong {
+            color: #0369a1;
+        }
         .loading { display: inline-block; width: 20px; height: 20px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.8s linear infinite; margin-left: 8px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .error-message { color: #dc2626; margin-top: 12px; font-size: 14px; }
@@ -140,12 +155,8 @@
             gap: 8px;
             user-select: none;
         }
-        .help-accordion summary::-webkit-details-marker {
-            display: none;
-        }
-        .help-accordion summary .help-icon {
-            font-size: 18px;
-        }
+        .help-accordion summary::-webkit-details-marker { display: none; }
+        .help-accordion summary .help-icon { font-size: 18px; }
         .help-accordion summary::after {
             content: '▼';
             margin-left: auto;
@@ -153,9 +164,7 @@
             color: #64748b;
             transition: transform 0.2s;
         }
-        .help-accordion[open] summary::after {
-            transform: rotate(180deg);
-        }
+        .help-accordion[open] summary::after { transform: rotate(180deg); }
         .help-content {
             padding: 0 18px 18px 18px;
             border-top: 1px solid #e2e8f0;
@@ -178,23 +187,15 @@
             font-size: 14px;
             flex-shrink: 0;
         }
-        .step-text strong {
-            color: #0f172a;
-        }
-        .step-text p {
-            margin: 6px 0 0 0;
-            color: #475569;
-            font-size: 14px;
-        }
+        .step-text strong { color: #0f172a; }
+        .step-text p { margin: 6px 0 0 0; color: #475569; font-size: 14px; }
         .technique-list {
             margin: 10px 0 0 0;
             padding-left: 20px;
             color: #334155;
             font-size: 14px;
         }
-        .technique-list li {
-            margin-bottom: 12px;
-        }
+        .technique-list li { margin-bottom: 12px; }
         .help-note {
             margin-top: 18px;
             padding: 12px;
@@ -215,7 +216,7 @@
 <body>
     <div class="container">
         <h1>🧠 VeritasPrompt</h1>
-        <p class="tagline">Generate field-aware, hallucination-resistant prompts with advanced cognitive frameworks.</p>
+        <p class="tagline">Nine cognitive scaffolds to brainstorm, structure, critique, and design your research.</p>
         
         <!-- Collapsible Help Section -->
         <details class="help-accordion">
@@ -225,16 +226,16 @@
                     <div class="step-number">1</div>
                     <div class="step-text">
                         <strong>Select your discipline</strong>
-                        <p>This tailors the prompt's framework—PICO for medicine, archival research for humanities, pedagogical frameworks for education, etc.</p>
+                        <p>Tailors the prompt's framework—PICO for medicine, UDL/Bloom for education, archival research for humanities, etc.</p>
                     </div>
                 </div>
                 <div class="help-step">
                     <div class="step-number">2</div>
                     <div class="step-text">
-                        <strong>Choose a prompt technique</strong>
-                        <p>Each technique applies a different cognitive framework used by expert scholars.</p>
+                        <strong>Choose a prompt type</strong>
+                        <p>Each type applies a different cognitive scaffold used by expert scholars. The nine types are grouped into Exploration, Structure, Critique, and Design.</p>
                         <ul class="technique-list" id="techniqueHelpList">
-                            <!-- Dynamically populated with detailed explanations -->
+                            <!-- Dynamically populated -->
                         </ul>
                     </div>
                 </div>
@@ -242,7 +243,7 @@
                     <div class="step-number">3</div>
                     <div class="step-text">
                         <strong>Enter your research topic & generate</strong>
-                        <p>Copy the generated prompt and paste it into ChatGPT, Claude, or any LLM. Always verify citations using the checklist below the prompt.</p>
+                        <p>Copy the prompt and paste it into the recommended AI tool. Always verify citations.</p>
                     </div>
                 </div>
                 <p class="help-note">💡 <strong>Pro tip:</strong> Use <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to generate quickly.</p>
@@ -262,18 +263,29 @@
             </select>
         </div>
 
-        <!-- Sophistication Mode -->
+        <!-- Prompt Type Selector with Optgroups -->
         <div class="form-group">
-            <label for="technique">🧠 Prompt Technique</label>
-            <select id="technique">
-                <option value="standard">Standard Inquiry (Basic)</option>
-                <option value="falsificationist">Falsificationist (Popperian Rigor)</option>
-                <option value="adversarial">Adversarial Dialectic (Thesis/Antithesis)</option>
-                <option value="triangulation">Methodological Triangulation</option>
-                <option value="genealogy">Conceptual Genealogy (Critical Theory)</option>
-                <option value="peerreview">Peer Review Simulation (Reviewer #2)</option>
+            <label for="promptType">🧠 Prompt Type</label>
+            <select id="promptType">
+                <optgroup label="🔍 Exploration">
+                    <option value="brainstorming">💡 Brainstorming – Novel angles & hypotheses</option>
+                    <option value="gap-analysis">🕳️ Gap Analysis – Identify underexplored areas</option>
+                </optgroup>
+                <optgroup label="📐 Structure">
+                    <option value="outlining">📑 Outlining – Structured skeleton for a paper</option>
+                    <option value="synthesis">🧩 Synthesis / Mapping – Thematic map of literature</option>
+                    <option value="framework">🗺️ Conceptual Framework – Theories & models to frame topic</option>
+                </optgroup>
+                <optgroup label="⚡ Critique">
+                    <option value="stress-testing">⚡ Stress‑Testing – Falsification tests & weaknesses</option>
+                    <option value="counter-argument">⚖️ Counter‑Argument – Alternative explanations</option>
+                </optgroup>
+                <optgroup label="🛠️ Design">
+                    <option value="methodology">🛠️ Methodological Design – Propose study design</option>
+                    <option value="rq-refinement">🎓 RQ Refinement – Narrow broad topic into precise question</option>
+                </optgroup>
             </select>
-            <div class="technique-hint" id="techniqueHint">Basic structured query with safety protocols.</div>
+            <div class="technique-hint" id="techniqueHint">Generate novel research questions, hypotheses, or interdisciplinary connections.</div>
         </div>
 
         <!-- Topic Input -->
@@ -295,6 +307,9 @@
             <div class="verification-note" id="verificationNote">
                 🔍 <strong>Verification Reminder:</strong> After using this prompt, verify any citations on PubMed, Google Scholar, or your field's primary database.
             </div>
+            <div class="tool-suggestion" id="toolSuggestion">
+                🛠️ <strong>Recommended Tool:</strong> <span id="toolName">ChatGPT / Claude</span> – <span id="toolReason">General purpose LLM suitable for most tasks.</span>
+            </div>
         </div>
 
         <!-- Email Signup with Netlify Forms -->
@@ -310,7 +325,7 @@
         </div>
 
         <div class="footer">
-            VeritasPrompt Micro · Researcher-crafted safety protocols
+            VeritasPrompt · Researcher-crafted cognitive scaffolds & safety protocols
         </div>
     </div>
 
@@ -320,7 +335,7 @@
 
         // DOM elements
         const fieldSelect = document.getElementById('field');
-        const techniqueSelect = document.getElementById('technique');
+        const promptTypeSelect = document.getElementById('promptType');
         const techniqueHint = document.getElementById('techniqueHint');
         const topicInput = document.getElementById('topic');
         const generateBtn = document.getElementById('generateBtn');
@@ -329,51 +344,40 @@
         const copyBtn = document.getElementById('copyBtn');
         const errorDiv = document.getElementById('error');
         const verificationNote = document.getElementById('verificationNote');
+        const toolNameSpan = document.getElementById('toolName');
+        const toolReasonSpan = document.getElementById('toolReason');
         const emailForm = document.getElementById('emailForm');
         const emailInput = document.getElementById('emailInput');
         const subscribeBtn = document.getElementById('subscribeBtn');
         const subscribeMessage = document.getElementById('subscribeMessage');
 
-        // Technique hints (used for inline hint)
+        // Detailed hints for each prompt type
         const techniqueHints = {
-            standard: 'Basic structured query with field-specific framework and safety protocols.',
-            falsificationist: 'Designs a falsification test. "What would prove this idea wrong?" Ideal for grant proposals.',
-            adversarial: 'Forces the AI to argue against itself (Thesis → Antithesis → Synthesis).',
-            triangulation: 'Examines the topic through quantitative, qualitative, and computational lenses simultaneously.',
-            genealogy: 'Unpacks the intellectual history and political baggage of key concepts.',
-            peerreview: 'Simulates a harsh peer review, generating major concerns and required citations.'
+            brainstorming: 'Generate novel research questions, hypotheses, or interdisciplinary connections.',
+            'gap-analysis': 'Identify underexplored areas, contradictions, or methodological weaknesses in the literature.',
+            outlining: 'Create a structured outline (headings and subpoints) for a paper, grant, or dissertation chapter.',
+            synthesis: 'Organize existing knowledge into a thematic map, typology, or conceptual framework.',
+            framework: 'Suggest relevant theories, models, or constructs that could frame your research topic.',
+            'stress-testing': 'Critically evaluate an idea, identify weak assumptions, or design falsification tests.',
+            'counter-argument': 'Generate plausible alternative explanations or opposing viewpoints to strengthen your argument.',
+            methodology: 'Propose a study design (methods, data sources, validity considerations) for your topic.',
+            'rq-refinement': 'Narrow a broad topic into a precise, answerable research question using established frameworks.'
         };
 
-        // Populate help accordion technique list with detailed explanations
+        // Populate help accordion
         const techniqueHelpList = document.getElementById('techniqueHelpList');
         if (techniqueHelpList) {
             const techniqueDetails = {
-                standard: {
-                    name: 'Standard Inquiry',
-                    description: 'A clear, structured academic prompt with field‑specific frameworks (e.g., PICO for medicine). Use when you need a reliable starting point for literature reviews or general exploration.'
-                },
-                falsificationist: {
-                    name: 'Falsificationist (Popperian Rigor)',
-                    description: 'Designs a falsification test. Asks "What would prove this idea wrong?" Ideal for grant proposals, hypothesis testing, and identifying methodological weaknesses.'
-                },
-                adversarial: {
-                    name: 'Adversarial Dialectic',
-                    description: 'Forces the AI to argue against itself (Thesis → Antithesis → Synthesis). Best for critical literature reviews, uncovering hidden assumptions, and strengthening arguments.'
-                },
-                triangulation: {
-                    name: 'Methodological Triangulation',
-                    description: 'Examines the topic through quantitative, qualitative, and computational lenses simultaneously. Use for mixed‑methods research or when you need a multidimensional perspective.'
-                },
-                genealogy: {
-                    name: 'Conceptual Genealogy',
-                    description: 'Traces the intellectual history and political baggage of key concepts. Essential for humanities, critical theory, and re‑problematizing taken‑for‑granted terms.'
-                },
-                peerreview: {
-                    name: 'Peer Review Simulation',
-                    description: 'Simulates a harsh peer review (Reviewer #2). Generates major concerns and required citations. Perfect before submitting to a journal or defending a dissertation.'
-                }
+                brainstorming: { name: '💡 Brainstorming', description: 'Explore novel research angles, hypotheses, or interdisciplinary connections. Ideal for early‑stage ideation.' },
+                'gap-analysis': { name: '🕳️ Gap Analysis', description: 'Identify underexplored areas, contradictions, or methodological weaknesses. Best for scoping a dissertation.' },
+                outlining: { name: '📑 Outlining', description: 'Produce a structured skeleton for a literature review, grant proposal, or dissertation chapter.' },
+                synthesis: { name: '🧩 Synthesis / Mapping', description: 'Organize existing knowledge into a thematic map or typology—without writing a full review.' },
+                framework: { name: '🗺️ Conceptual Framework', description: 'Suggest relevant theories, models, or constructs to productively frame your research topic.' },
+                'stress-testing': { name: '⚡ Stress‑Testing', description: 'Critically evaluate an idea, identify weak assumptions, or design falsification tests.' },
+                'counter-argument': { name: '⚖️ Counter‑Argument', description: 'Provide alternative explanations or opposing viewpoints to strengthen your argument.' },
+                methodology: { name: '🛠️ Methodological Design', description: 'Design a study—choosing methods, data sources, and anticipating validity threats.' },
+                'rq-refinement': { name: '🎓 RQ Refinement', description: 'Narrow a broad topic into a precise, answerable research question using frameworks like PICo or FINER.' }
             };
-
             for (const [key, details] of Object.entries(techniqueDetails)) {
                 const li = document.createElement('li');
                 li.innerHTML = `<strong>${details.name}:</strong> ${details.description}`;
@@ -381,8 +385,8 @@
             }
         }
 
-        techniqueSelect.addEventListener('change', () => {
-            techniqueHint.textContent = techniqueHints[techniqueSelect.value] || techniqueHints.standard;
+        promptTypeSelect.addEventListener('change', () => {
+            techniqueHint.textContent = techniqueHints[promptTypeSelect.value] || techniqueHints.brainstorming;
         });
 
         // Verification notes per field
@@ -395,10 +399,104 @@
             comp: '🔍 Verify benchmarks on Papers with Code. Check arXiv for recent preprints.'
         };
 
+        // Static tool recommendation mapping (discipline + promptType -> {tool, reason})
+        function getToolRecommendation(field, promptType) {
+            // Default fallback
+            const defaultRec = { tool: 'ChatGPT / Claude', reason: 'General purpose LLMs suitable for most academic tasks.' };
+
+            // Mapping table – curated based on 2026 AI tool landscape
+            const map = {
+                // Clinical Medicine
+                clinical: {
+                    brainstorming: { tool: 'Perplexity (Academic Focus)', reason: 'Provides cited sources from PubMed; excellent for initial exploration.' },
+                    'gap-analysis': { tool: 'scite', reason: 'Shows supporting/contrasting evidence; helps identify genuine gaps.' },
+                    outlining: { tool: 'Claude', reason: 'Long context window ideal for structuring complex clinical reviews.' },
+                    synthesis: { tool: 'Elicit', reason: 'Extracts data across multiple papers; perfect for systematic reviews.' },
+                    framework: { tool: 'Connected Papers', reason: 'Visualizes citation networks to identify foundational theories.' },
+                    'stress-testing': { tool: 'scite', reason: 'Checks if subsequent studies support or weaken key claims.' },
+                    'counter-argument': { tool: 'Consensus', reason: 'Aggregates findings from multiple studies; helps find dissenting evidence.' },
+                    methodology: { tool: 'Claude', reason: 'Excellent for drafting detailed IRB protocols and methodological justifications.' },
+                    'rq-refinement': { tool: 'Perplexity', reason: 'Quickly finds recent literature to refine PICO elements.' }
+                },
+                // STEM
+                stem: {
+                    brainstorming: { tool: 'Perplexity', reason: 'Searches arXiv and open-access journals for emerging ideas.' },
+                    'gap-analysis': { tool: 'Semantic Scholar', reason: 'AI-powered search identifies influential but under-cited papers.' },
+                    outlining: { tool: 'Claude', reason: 'Handles technical documents and complex outlines well.' },
+                    synthesis: { tool: 'Elicit', reason: 'Systematic extraction of experimental parameters across studies.' },
+                    framework: { tool: 'Connected Papers', reason: 'Maps the evolution of a research area.' },
+                    'stress-testing': { tool: 'Research Rabbit', reason: 'Explores citation networks to find contradictory findings.' },
+                    'counter-argument': { tool: 'Consensus', reason: 'Provides evidence-based answers with study snippets.' },
+                    methodology: { tool: 'ChatGPT Code Interpreter', reason: 'Can suggest statistical tests and experimental designs.' },
+                    'rq-refinement': { tool: 'Perplexity', reason: 'Finds recent preprints to assess novelty.' }
+                },
+                // Social Sciences
+                social: {
+                    brainstorming: { tool: 'Perplexity', reason: 'Searches across disciplines; good for interdisciplinary angles.' },
+                    'gap-analysis': { tool: 'scite', reason: 'Useful for tracking citation contexts in social science literature.' },
+                    outlining: { tool: 'Claude', reason: 'Nuanced understanding of social theory and qualitative framing.' },
+                    synthesis: { tool: 'Elicit', reason: 'Can extract themes and findings from qualitative studies.' },
+                    framework: { tool: 'Connected Papers', reason: 'Visualizes theoretical lineages.' },
+                    'stress-testing': { tool: 'Consensus', reason: 'Finds studies that challenge prevailing social theories.' },
+                    'counter-argument': { tool: 'Perplexity', reason: 'Surfaces diverse perspectives, including non-Western scholarship.' },
+                    methodology: { tool: 'Claude', reason: 'Strong at suggesting qualitative and mixed‑methods designs.' },
+                    'rq-refinement': { tool: 'Google Scholar + AI', reason: 'Broad coverage for feasibility checks.' }
+                },
+                // Education
+                education: {
+                    brainstorming: { tool: 'Perplexity', reason: 'Searches ERIC, JSTOR, and open web for pedagogical innovations.' },
+                    'gap-analysis': { tool: 'Elicit', reason: 'Systematic review capabilities for educational interventions.' },
+                    outlining: { tool: 'Claude', reason: 'Structures literature reviews aligned with Bloom or UDL.' },
+                    synthesis: { tool: 'Research Rabbit', reason: 'Builds collections of papers around specific pedagogies.' },
+                    framework: { tool: 'Connected Papers', reason: 'Traces theoretical influences in educational research.' },
+                    'stress-testing': { tool: 'scite', reason: 'Checks replication status of educational studies.' },
+                    'counter-argument': { tool: 'Consensus', reason: 'Finds meta‑analyses and effect sizes.' },
+                    methodology: { tool: 'Claude', reason: 'Design‑based research and mixed‑methods proposals.' },
+                    'rq-refinement': { tool: 'Perplexity', reason: 'Identifies recent systematic reviews to avoid duplication.' }
+                },
+                // Humanities
+                humanities: {
+                    brainstorming: { tool: 'JSTOR + AI', reason: 'Broad corpus for exploring interdisciplinary connections.' },
+                    'gap-analysis': { tool: 'Google Scholar', reason: 'Manually identify under‑cited archival works.' },
+                    outlining: { tool: 'Claude', reason: 'Nuanced handling of theoretical and narrative structures.' },
+                    synthesis: { tool: 'Zotero + AI plugins', reason: 'Organize and thematically tag primary sources.' },
+                    framework: { tool: 'Connected Papers', reason: 'Limited in humanities, but useful for theory citation networks.' },
+                    'stress-testing': { tool: 'Perplexity', reason: 'Finds critiques and alternative interpretations.' },
+                    'counter-argument': { tool: 'Google Scholar', reason: 'Search for dissenting scholarly voices.' },
+                    methodology: { tool: 'Claude', reason: 'Archival research planning and theoretical framework justification.' },
+                    'rq-refinement': { tool: 'Lens.org', reason: 'Patent and scholarly search for interdisciplinary humanities projects.' }
+                },
+                // Computer Science / AI
+                comp: {
+                    brainstorming: { tool: 'Perplexity', reason: 'Searches arXiv, GitHub, and tech blogs for cutting‑edge ideas.' },
+                    'gap-analysis': { tool: 'Semantic Scholar', reason: 'Identifies influential papers with few follow‑up studies.' },
+                    outlining: { tool: 'Claude', reason: 'Handles technical LaTeX and algorithm descriptions.' },
+                    synthesis: { tool: 'Elicit', reason: 'Compares benchmark results across papers.' },
+                    framework: { tool: 'Connected Papers', reason: 'Visualizes derivative works and SOTA evolution.' },
+                    'stress-testing': { tool: 'Papers with Code', reason: 'Checks reproducibility and benchmark performance.' },
+                    'counter-argument': { tool: 'Consensus', reason: 'Finds papers that report negative or contradictory results.' },
+                    methodology: { tool: 'ChatGPT + Code Interpreter', reason: 'Suggests architectures and evaluation metrics.' },
+                    'rq-refinement': { tool: 'arXiv + Perplexity', reason: 'Ensures novelty by checking recent preprints.' }
+                }
+            };
+
+            if (map[field] && map[field][promptType]) {
+                return map[field][promptType];
+            }
+            return defaultRec;
+        }
+
+        // Update tool suggestion UI
+        function updateToolSuggestion(field, promptType) {
+            const rec = getToolRecommendation(field, promptType);
+            toolNameSpan.textContent = rec.tool;
+            toolReasonSpan.textContent = rec.reason;
+        }
+
         // Generate prompt function
         async function generatePrompt() {
             const field = fieldSelect.value;
-            const technique = techniqueSelect.value;
+            const promptType = promptTypeSelect.value;
             const topic = topicInput.value.trim();
 
             if (!topic) {
@@ -415,7 +513,7 @@
                 const response = await fetch(GENERATE_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ field, technique, topic })
+                    body: JSON.stringify({ field, promptType, topic })
                 });
 
                 const data = await response.json();
@@ -426,6 +524,7 @@
 
                 promptOutput.textContent = data.prompt;
                 verificationNote.innerHTML = `<strong>🔍 Verification Reminder:</strong> ${verificationNotes[field] || verificationNotes.clinical}`;
+                updateToolSuggestion(field, promptType);
                 outputSection.style.display = 'block';
                 outputSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
@@ -449,47 +548,12 @@
             });
         });
 
-        /* 
-        // Email subscription with Netlify Forms (AJAX) - commented out to rely on native Netlify Forms
-        emailForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = emailInput.value.trim();
-            
-            if (!email || !email.includes('@')) {
-                subscribeMessage.textContent = 'Please enter a valid email address.';
-                subscribeMessage.style.color = '#dc2626';
-                return;
-            }
-
-            subscribeBtn.disabled = true;
-            subscribeBtn.innerHTML = 'Subscribing...';
-            subscribeMessage.textContent = '';
-            subscribeMessage.style.color = '#16a34a';
-
-            const formData = new FormData(emailForm);
-            try {
-                await fetch('/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams(formData).toString()
-                });
-                subscribeMessage.textContent = '✅ Thanks! You\'re on the waitlist.';
-                subscribeMessage.style.color = '#16a34a';
-                emailInput.value = '';
-            } catch (err) {
-                subscribeMessage.textContent = 'Error. Please try again.';
-                subscribeMessage.style.color = '#dc2626';
-            } finally {
-                subscribeBtn.disabled = false;
-                subscribeBtn.innerHTML = 'Notify Me';
-            }
-        });
-        */
-
         // Keyboard shortcut: Ctrl+Enter to generate
         topicInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && e.ctrlKey) generatePrompt();
         });
+
+        // Email AJAX is commented out; native Netlify Forms used.
     </script>
 </body>
 </html>
