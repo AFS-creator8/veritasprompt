@@ -169,13 +169,14 @@
             </div>
         </div>
 
-        <!-- Email Signup Section (NEW) -->
+       <!-- Email Signup with Netlify Forms -->
         <div class="email-section">
-            <h3>🚀 Get Early Access to Pro Features</h3>
-            <p>Automated citation verification, advanced technique library, and provenance reports. Join the waitlist.</p>
-            <form id="emailForm" class="email-form">
-                <input type="email" id="emailInput" placeholder="your.email@university.edu" required>
-                <button type="submit" id="subscribeBtn">Notify Me</button>
+           <h3>🚀 Get Early Access to Pro Features</h3>
+           <p>Automated citation verification, advanced technique library, and provenance reports. Join the waitlist.</p>
+           <form name="waitlist" method="POST" data-netlify="true" class="email-form">
+                <input type="hidden" name="form-name" value="waitlist" />
+                <input type="email" name="email" id="emailInput" placeholder="your.email@university.edu" required>
+              <button type="submit" id="subscribeBtn">Notify Me</button>
             </form>
             <div id="subscribeMessage" class="success-message"></div>
         </div>
@@ -284,44 +285,7 @@
         });
 
         // Email subscription
-        emailForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = emailInput.value.trim();
-            
-            if (!email || !email.includes('@')) {
-                subscribeMessage.textContent = 'Please enter a valid email address.';
-                subscribeMessage.style.color = '#dc2626';
-                return;
-            }
-
-            subscribeBtn.disabled = true;
-            subscribeBtn.innerHTML = 'Subscribing...';
-            subscribeMessage.textContent = '';
-            subscribeMessage.style.color = '#16a34a';
-
-            try {
-                const response = await fetch(SUBSCRIBE_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Subscription failed');
-                }
-
-                subscribeMessage.textContent = '✅ Thanks! You\'re on the waitlist.';
-                emailInput.value = '';
-            } catch (err) {
-                subscribeMessage.textContent = `Error: ${err.message}`;
-                subscribeMessage.style.color = '#dc2626';
-            } finally {
-                subscribeBtn.disabled = false;
-                subscribeBtn.innerHTML = 'Notify Me';
-            }
-        });
+        
 
         // Keyboard shortcut
         topicInput.addEventListener('keydown', (e) => {
