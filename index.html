@@ -24,7 +24,7 @@
             box-shadow: 0 4px 16px rgba(0,0,0,0.08);
         }
         h1 { margin-top: 0; color: #1e293b; display: flex; align-items: center; gap: 8px; }
-        .tagline { color: #64748b; margin-bottom: 30px; }
+        .tagline { color: #64748b; margin-bottom: 20px; }
         .form-group { margin-bottom: 24px; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: #334155; }
         select, textarea, input {
@@ -115,6 +115,101 @@
             color: #64748b;
             margin-top: 6px;
         }
+
+        /* Help Accordion */
+        .help-accordion {
+            margin-bottom: 24px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0;
+            transition: all 0.2s;
+        }
+        .help-accordion[open] {
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .help-accordion summary {
+            padding: 14px 18px;
+            font-weight: 600;
+            color: #1e293b;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+        }
+        .help-accordion summary::-webkit-details-marker {
+            display: none;
+        }
+        .help-accordion summary .help-icon {
+            font-size: 18px;
+        }
+        .help-accordion summary::after {
+            content: '▼';
+            margin-left: auto;
+            font-size: 12px;
+            color: #64748b;
+            transition: transform 0.2s;
+        }
+        .help-accordion[open] summary::after {
+            transform: rotate(180deg);
+        }
+        .help-content {
+            padding: 0 18px 18px 18px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .help-step {
+            display: flex;
+            gap: 14px;
+            margin-top: 18px;
+        }
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: #2563eb;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .step-text strong {
+            color: #0f172a;
+        }
+        .step-text p {
+            margin: 6px 0 0 0;
+            color: #475569;
+            font-size: 14px;
+        }
+        .technique-list {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+            color: #334155;
+            font-size: 14px;
+        }
+        .technique-list li {
+            margin-bottom: 8px;
+        }
+        .help-note {
+            margin-top: 18px;
+            padding: 12px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #1e293b;
+        }
+        kbd {
+            background: #e2e8f0;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: monospace;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -122,6 +217,38 @@
         <h1>🧠 VeritasPrompt</h1>
         <p class="tagline">Generate field-aware, hallucination-resistant prompts with advanced cognitive frameworks.</p>
         
+        <!-- Collapsible Help Section -->
+        <details class="help-accordion">
+            <summary><span class="help-icon">📘</span> New here? Read the quick guide</summary>
+            <div class="help-content">
+                <div class="help-step">
+                    <div class="step-number">1</div>
+                    <div class="step-text">
+                        <strong>Select your discipline</strong>
+                        <p>This tailors the prompt's framework—PICO for medicine, archival research for humanities, pedagogical frameworks for education, etc.</p>
+                    </div>
+                </div>
+                <div class="help-step">
+                    <div class="step-number">2</div>
+                    <div class="step-text">
+                        <strong>Choose a prompt technique</strong>
+                        <p>Each technique applies a different cognitive framework used by expert scholars.</p>
+                        <ul class="technique-list" id="techniqueHelpList">
+                            <!-- Dynamically populated from techniqueHints object -->
+                        </ul>
+                    </div>
+                </div>
+                <div class="help-step">
+                    <div class="step-number">3</div>
+                    <div class="step-text">
+                        <strong>Enter your research topic & generate</strong>
+                        <p>Copy the generated prompt and paste it into ChatGPT, Claude, or any LLM. Always verify citations using the checklist below the prompt.</p>
+                    </div>
+                </div>
+                <p class="help-note">💡 <strong>Pro tip:</strong> Use <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to generate quickly.</p>
+            </div>
+        </details>
+
         <!-- Discipline Selector -->
         <div class="form-group">
             <label for="field">📚 Discipline</label>
@@ -129,6 +256,7 @@
                 <option value="clinical">🩺 Clinical Medicine / Public Health</option>
                 <option value="stem">🔬 STEM / Natural Sciences</option>
                 <option value="social">📊 Social Sciences</option>
+                <option value="education">🎓 Education / Learning Sciences</option>
                 <option value="humanities">📖 Humanities</option>
                 <option value="comp">💻 Computer Science / AI</option>
             </select>
@@ -206,7 +334,7 @@
         const subscribeBtn = document.getElementById('subscribeBtn');
         const subscribeMessage = document.getElementById('subscribeMessage');
 
-        // Technique hints
+        // Technique hints (used for both inline hint and help accordion)
         const techniqueHints = {
             standard: 'Basic structured query with field-specific framework and safety protocols.',
             falsificationist: 'Designs a falsification test. "What would prove this idea wrong?" Ideal for grant proposals.',
@@ -215,6 +343,24 @@
             genealogy: 'Unpacks the intellectual history and political baggage of key concepts.',
             peerreview: 'Simulates a harsh peer review, generating major concerns and required citations.'
         };
+
+        // Populate help accordion technique list dynamically
+        const techniqueHelpList = document.getElementById('techniqueHelpList');
+        if (techniqueHelpList) {
+            const techniqueNames = {
+                standard: 'Standard Inquiry',
+                falsificationist: 'Falsificationist',
+                adversarial: 'Adversarial Dialectic',
+                triangulation: 'Methodological Triangulation',
+                genealogy: 'Conceptual Genealogy',
+                peerreview: 'Peer Review Simulation'
+            };
+            for (const [key, hint] of Object.entries(techniqueHints)) {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${techniqueNames[key] || key}:</strong> ${hint}`;
+                techniqueHelpList.appendChild(li);
+            }
+        }
 
         techniqueSelect.addEventListener('change', () => {
             techniqueHint.textContent = techniqueHints[techniqueSelect.value] || techniqueHints.standard;
@@ -225,6 +371,7 @@
             clinical: '🔍 Verify any mentioned studies on PubMed or ClinicalTrials.gov. Check that PICO elements are specific.',
             stem: '🔍 Verify dataset names exist. Check that statistical tests are appropriate.',
             social: '🔍 Confirm survey instruments or qualitative methods are established. Search PsycINFO or SocINDEX.',
+            education: '🔍 Verify studies on ERIC, JSTOR, or Google Scholar. Check if the intervention aligns with established pedagogical frameworks.',
             humanities: '🔍 Verify archive locations via WorldCat. Confirm theoretical texts are accurately cited.',
             comp: '🔍 Verify benchmarks on Papers with Code. Check arXiv for recent preprints.'
         };
@@ -284,9 +431,9 @@
         });
 
         // Email subscription with Netlify Forms (AJAX)
-        /*emailForm.addEventListener('submit', async (e) => {
+        emailForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = emailInput.value.trim();
+            /*const email = emailInput.value.trim();
             
             if (!email || !email.includes('@')) {
                 subscribeMessage.textContent = 'Please enter a valid email address.';
@@ -317,7 +464,7 @@
                 subscribeBtn.innerHTML = 'Notify Me';
             }
         });
-        */
+*/
 
         // Keyboard shortcut: Ctrl+Enter to generate
         topicInput.addEventListener('keydown', (e) => {

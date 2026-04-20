@@ -29,11 +29,12 @@ exports.handler = async (event) => {
       };
     }
 
-    // Field-specific framing
+    // Field-specific framing (now includes Education)
     const fieldFraming = {
       clinical: 'Use the PICO framework. Focus on testable clinical hypotheses.',
       stem: 'Focus on methodological gaps and falsifiable experiments.',
       social: 'Generate both quantitative and qualitative research angles.',
+      education: 'Use frameworks like Bloom\'s Taxonomy, UDL, or design-based research. Focus on pedagogical interventions, learning outcomes, or equity in education.',
       humanities: 'Use theoretical lenses and archival perspectives. Avoid "gap" language.',
       comp: 'Focus on generalization, efficiency, and benchmark limitations.'
     };
