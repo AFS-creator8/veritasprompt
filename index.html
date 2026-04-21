@@ -493,16 +493,15 @@
                 return;
             }
 
-            // Umami Cloud custom event tracking
+            // Umami Cloud custom event tracking (robust version)
             if (typeof umami !== 'undefined') {
                 const trackFn = umami.track || umami.trackEvent;
-                    if (trackFn) {
-                     trackFn('Generate Prompt', {
-                     discipline: field,
+                if (trackFn) {
+                    trackFn('Generate Prompt', {
+                        discipline: field,
                         promptType: promptType
-                });
-    }
-}
+                    });
+                }
             }
 
             errorDiv.textContent = '';
