@@ -1,4 +1,8 @@
-exports.handler = async (event) => {
+// functions/generate.js
+export async function onRequest(context) {
+  const { request, env } = context;
+
+  // CORS headers
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
@@ -6,27 +10,26 @@ exports.handler = async (event) => {
     'Content-Type': 'application/json'
   };
 
-  if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 204, headers };
+  // Handle preflight OPTIONS request
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { status: 204, headers });
   }
 
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      headers,
-      body: JSON.stringify({ error: 'Method not allowed' })
-    };
+  if (request.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers
+    });
   }
 
   try {
-    const { field, promptType, topic } = JSON.parse(event.body);
+    const { field, promptType, topic } = await request.json();
 
     if (!field || !topic) {
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({ error: 'Missing field or topic' })
-      };
+      return new Response(JSON.stringify({ error: 'Missing field or topic' }), {
+        status: 400,
+        headers
+      });
     }
 
     // Detailed instructions for each prompt type
@@ -65,7 +68,7 @@ Now, write the prompt (and only the prompt):`;
     const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+        'Authorization': `Bearer ${env.GROQ_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -87,18 +90,16 @@ Now, write the prompt (and only the prompt):`;
 
     const generatedPrompt = data.choices?.[0]?.message?.content || 'Error: Could not generate prompt.';
 
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ prompt: generatedPrompt })
-    };
+    return new Response(JSON.stringify({ prompt: generatedPrompt }), {
+      status: 200,
+      headers
+    });
 
   } catch (error) {
     console.error('Function error:', error);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: error.message || 'Internal server error' })
-    };
+    return new Response(JSON.stringify({ error: error.message || 'Internal server error' }), {
+      status: 500,
+      headers
+    });
   }
-};
+}

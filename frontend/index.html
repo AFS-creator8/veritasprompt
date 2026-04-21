@@ -234,22 +234,21 @@
             border-radius: 12px;
             display: none;
         }
-        .feedback-modal textarea {
-            min-height: 100px;
-            margin-bottom: 16px;
-        }
         .feedback-modal .button-group {
             display: flex;
             gap: 12px;
             justify-content: flex-end;
-        }
-        .feedback-modal .button-group button {
-            width: auto;
-            padding: 10px 20px;
+            margin-top: 16px;
         }
         .feedback-modal .cancel-btn {
             background: #e2e8f0;
             color: #1e293b;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            width: auto;
         }
         .feedback-modal .cancel-btn:hover {
             background: #cbd5e1;
@@ -263,7 +262,7 @@
             <img src="logo.png" alt="VeritasPrompt Logo">
             VeritasPrompt
         </h1>
-        <p class="tagline">Turning vague research curiosity into rigorous, safe academic outputs.</p>
+        <p class="tagline">VeritasPrompt. Turning vague research curiosity into rigorous, safe academic outputs.</p>
         
         <!-- Collapsible Help Section -->
         <details class="help-accordion">
@@ -359,43 +358,36 @@
             </div>
         </div>
 
-        <!-- Email Signup with Netlify Forms -->
+        <!-- Email Signup with Tally -->
         <div class="email-section">
             <h3>🚀 Get Early Access to Pro Features</h3>
             <p>Automated citation verification, advanced technique library, and provenance reports. Join the waitlist.</p>
-            <form name="waitlist" method="POST" data-netlify="true" id="emailForm" class="email-form">
-                <input type="hidden" name="form-name" value="waitlist" />
-                <input type="email" name="email" id="emailInput" placeholder="your.email@university.edu" required>
-                <button type="submit" id="subscribeBtn">Notify Me</button>
-            </form>
-            <div id="subscribeMessage" class="success-message"></div>
+            <iframe data-tally-src="https://tally.so/embed/xXNbPG?hideTitle=1&transparentBackground=1" width="100%" height="200" frameborder="0"></iframe>
         </div>
 
-        <!-- Feedback Section (collapsible) -->
+        <!-- Feedback Section (collapsible modal) -->
         <div class="feedback-modal" id="feedbackModal">
             <h3 style="margin-top: 0; color: #1e293b;">📝 Share your feedback</h3>
             <p style="color: #64748b; margin-bottom: 16px;">What worked well? What could be improved? Your input shapes VeritasPrompt.</p>
-            <form name="feedback" method="POST" data-netlify="true" id="feedbackForm">
-                <input type="hidden" name="form-name" value="feedback" />
-                <textarea name="message" id="feedbackMessage" placeholder="e.g., 'I'd love a dark mode' or 'The gap analysis prompt was spot on.'" required></textarea>
-                <div class="button-group">
-                    <button type="button" class="cancel-btn" id="closeFeedbackBtn">Cancel</button>
-                    <button type="submit" id="submitFeedbackBtn">Send Feedback</button>
-                </div>
-            </form>
-            <div id="feedbackSuccessMessage" class="success-message" style="margin-top: 16px;"></div>
+            <iframe data-tally-src="https://tally.so/embed/obVNV1?hideTitle=1&transparentBackground=1" width="100%" height="250" frameborder="0"></iframe>
+            <div class="button-group">
+                <button type="button" class="cancel-btn" id="closeFeedbackBtn">Close</button>
+            </div>
         </div>
 
         <div class="footer">
-            <span>Researcher-crafted cognitive scaffolds & safety protocols (C) 2026</span>
+            <span>VeritasPrompt · Researcher-crafted cognitive scaffolds & safety protocols</span>
             <span>·</span>
             <a href="#" id="showFeedbackLink">📝 Send feedback</a>
         </div>
     </div>
 
+    <!-- Tally Embed Script -->
+    <script async src="https://tally.so/widgets/embed.js"></script>
+
     <script>
-        // API endpoint for prompt generation
-        const GENERATE_URL = '/.netlify/functions/generate';
+        // API endpoint for prompt generation (Cloudflare Pages Function)
+        const GENERATE_URL = '/generate';
 
         // DOM elements
         const fieldSelect = document.getElementById('field');
@@ -410,58 +402,20 @@
         const verificationNote = document.getElementById('verificationNote');
         const toolNameSpan = document.getElementById('toolName');
         const toolReasonSpan = document.getElementById('toolReason');
-        const emailForm = document.getElementById('emailForm');
-        const emailInput = document.getElementById('emailInput');
-        const subscribeBtn = document.getElementById('subscribeBtn');
-        const subscribeMessage = document.getElementById('subscribeMessage');
 
         // Feedback elements
         const showFeedbackLink = document.getElementById('showFeedbackLink');
         const feedbackModal = document.getElementById('feedbackModal');
         const closeFeedbackBtn = document.getElementById('closeFeedbackBtn');
-        const feedbackForm = document.getElementById('feedbackForm');
-        const feedbackMessage = document.getElementById('feedbackMessage');
-        const feedbackSuccessMessage = document.getElementById('feedbackSuccessMessage');
 
         // Show/hide feedback modal
         showFeedbackLink.addEventListener('click', (e) => {
             e.preventDefault();
             feedbackModal.style.display = 'block';
-            feedbackSuccessMessage.textContent = '';
-            feedbackMessage.value = '';
         });
 
         closeFeedbackBtn.addEventListener('click', () => {
             feedbackModal.style.display = 'none';
-        });
-
-        // Handle feedback form submission (AJAX to Netlify)
-        feedbackForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const message = feedbackMessage.value.trim();
-            if (!message) {
-                feedbackSuccessMessage.textContent = 'Please enter a message.';
-                feedbackSuccessMessage.style.color = '#dc2626';
-                return;
-            }
-
-            const formData = new FormData(feedbackForm);
-            try {
-                await fetch('/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams(formData).toString()
-                });
-                feedbackSuccessMessage.textContent = '✅ Thanks! Your feedback has been sent.';
-                feedbackSuccessMessage.style.color = '#16a34a';
-                feedbackMessage.value = '';
-                setTimeout(() => {
-                    feedbackModal.style.display = 'none';
-                }, 2000);
-            } catch (err) {
-                feedbackSuccessMessage.textContent = 'Error sending feedback. Please try again.';
-                feedbackSuccessMessage.style.color = '#dc2626';
-            }
         });
 
         // Detailed hints for each prompt type
