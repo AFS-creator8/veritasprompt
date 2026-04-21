@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VeritasPrompt – Academic Prompt Generator</title>
+    <!-- Umami Cloud Analytics (permanent free tier) -->
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="ff29b1ee-9b07-4090-8490-97903d857e2b"></script>
     <style>
         * { box-sizing: border-box; margin: 0; }
         body {
@@ -216,7 +218,7 @@
 <body>
     <div class="container">
         <h1>🧠 VeritasPrompt</h1>
-        <p class="tagline">Nine cognitive scaffolds to brainstorm, structure, critique, and design your research.</p>
+        <p class="tagline">VeritasPrompt. Turning vague research curiosity into rigorous, safe academic outputs.</p>
         
         <!-- Collapsible Help Section -->
         <details class="help-accordion">
@@ -401,12 +403,8 @@
 
         // Static tool recommendation mapping (discipline + promptType -> {tool, reason})
         function getToolRecommendation(field, promptType) {
-            // Default fallback
             const defaultRec = { tool: 'ChatGPT / Claude', reason: 'General purpose LLMs suitable for most academic tasks.' };
-
-            // Mapping table – curated based on 2026 AI tool landscape
             const map = {
-                // Clinical Medicine
                 clinical: {
                     brainstorming: { tool: 'Perplexity (Academic Focus)', reason: 'Provides cited sources from PubMed; excellent for initial exploration.' },
                     'gap-analysis': { tool: 'scite', reason: 'Shows supporting/contrasting evidence; helps identify genuine gaps.' },
@@ -418,7 +416,6 @@
                     methodology: { tool: 'Claude', reason: 'Excellent for drafting detailed IRB protocols and methodological justifications.' },
                     'rq-refinement': { tool: 'Perplexity', reason: 'Quickly finds recent literature to refine PICO elements.' }
                 },
-                // STEM
                 stem: {
                     brainstorming: { tool: 'Perplexity', reason: 'Searches arXiv and open-access journals for emerging ideas.' },
                     'gap-analysis': { tool: 'Semantic Scholar', reason: 'AI-powered search identifies influential but under-cited papers.' },
@@ -430,7 +427,6 @@
                     methodology: { tool: 'ChatGPT Code Interpreter', reason: 'Can suggest statistical tests and experimental designs.' },
                     'rq-refinement': { tool: 'Perplexity', reason: 'Finds recent preprints to assess novelty.' }
                 },
-                // Social Sciences
                 social: {
                     brainstorming: { tool: 'Perplexity', reason: 'Searches across disciplines; good for interdisciplinary angles.' },
                     'gap-analysis': { tool: 'scite', reason: 'Useful for tracking citation contexts in social science literature.' },
@@ -442,7 +438,6 @@
                     methodology: { tool: 'Claude', reason: 'Strong at suggesting qualitative and mixed‑methods designs.' },
                     'rq-refinement': { tool: 'Google Scholar + AI', reason: 'Broad coverage for feasibility checks.' }
                 },
-                // Education
                 education: {
                     brainstorming: { tool: 'Perplexity', reason: 'Searches ERIC, JSTOR, and open web for pedagogical innovations.' },
                     'gap-analysis': { tool: 'Elicit', reason: 'Systematic review capabilities for educational interventions.' },
@@ -454,7 +449,6 @@
                     methodology: { tool: 'Claude', reason: 'Design‑based research and mixed‑methods proposals.' },
                     'rq-refinement': { tool: 'Perplexity', reason: 'Identifies recent systematic reviews to avoid duplication.' }
                 },
-                // Humanities
                 humanities: {
                     brainstorming: { tool: 'JSTOR + AI', reason: 'Broad corpus for exploring interdisciplinary connections.' },
                     'gap-analysis': { tool: 'Google Scholar', reason: 'Manually identify under‑cited archival works.' },
@@ -466,7 +460,6 @@
                     methodology: { tool: 'Claude', reason: 'Archival research planning and theoretical framework justification.' },
                     'rq-refinement': { tool: 'Lens.org', reason: 'Patent and scholarly search for interdisciplinary humanities projects.' }
                 },
-                // Computer Science / AI
                 comp: {
                     brainstorming: { tool: 'Perplexity', reason: 'Searches arXiv, GitHub, and tech blogs for cutting‑edge ideas.' },
                     'gap-analysis': { tool: 'Semantic Scholar', reason: 'Identifies influential papers with few follow‑up studies.' },
@@ -479,14 +472,10 @@
                     'rq-refinement': { tool: 'arXiv + Perplexity', reason: 'Ensures novelty by checking recent preprints.' }
                 }
             };
-
-            if (map[field] && map[field][promptType]) {
-                return map[field][promptType];
-            }
+            if (map[field] && map[field][promptType]) return map[field][promptType];
             return defaultRec;
         }
 
-        // Update tool suggestion UI
         function updateToolSuggestion(field, promptType) {
             const rec = getToolRecommendation(field, promptType);
             toolNameSpan.textContent = rec.tool;
@@ -502,6 +491,14 @@
             if (!topic) {
                 errorDiv.textContent = 'Please enter a research topic.';
                 return;
+            }
+
+            // Umami Cloud custom event tracking
+            if (window.umami) {
+                umami.track('Generate Prompt', {
+                    discipline: field,
+                    promptType: promptType
+                });
             }
 
             errorDiv.textContent = '';
