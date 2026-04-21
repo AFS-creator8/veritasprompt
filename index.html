@@ -25,7 +25,18 @@
             border-radius: 16px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.08);
         }
-        h1 { margin-top: 0; color: #1e293b; display: flex; align-items: center; gap: 8px; }
+        h1 { 
+            margin-top: 0; 
+            color: #1e293b; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        h1 img {
+            display: block;
+            max-height: 45px;
+            width: auto;
+        }
         .tagline { color: #64748b; margin-bottom: 20px; }
         .form-group { margin-bottom: 24px; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: #334155; }
@@ -247,8 +258,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>🧠 VeritasPrompt</h1>
-        <p class="tagline">Turning vague research curiosity into rigorous, safe academic outputs.</p>
+        <!-- Logo & Title -->
+        <h1>
+            <img src="logo.png" alt="VeritasPrompt Logo">
+            VeritasPrompt
+        </h1>
+        <p class="tagline">VeritasPrompt. Turning vague research curiosity into rigorous, safe academic outputs.</p>
         
         <!-- Collapsible Help Section -->
         <details class="help-accordion">
@@ -372,7 +387,7 @@
         </div>
 
         <div class="footer">
-            <span>VeritasPrompt · Researcher-crafted cognitive scaffolds & safety protocols (C) 2026</span>
+            <span>VeritasPrompt · Researcher-crafted cognitive scaffolds & safety protocols</span>
             <span>·</span>
             <a href="#" id="showFeedbackLink">📝 Send feedback</a>
         </div>
@@ -440,7 +455,6 @@
                 feedbackSuccessMessage.textContent = '✅ Thanks! Your feedback has been sent.';
                 feedbackSuccessMessage.style.color = '#16a34a';
                 feedbackMessage.value = '';
-                // Optionally close after 2 seconds
                 setTimeout(() => {
                     feedbackModal.style.display = 'none';
                 }, 2000);
@@ -590,7 +604,7 @@
                 return;
             }
 
-            // Umami Cloud custom event tracking (basic, properties may not show due to version differences)
+            // Umami Cloud custom event tracking
             if (typeof umami !== 'undefined') {
                 const trackFn = umami.track || umami.trackEvent;
                 if (trackFn) {
