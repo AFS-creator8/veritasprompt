@@ -105,15 +105,14 @@
             align-items: center;
             gap: 8px;
         }
-        .tool-suggestion strong {
-            color: #0369a1;
-        }
+        .tool-suggestion strong { color: #0369a1; }
         .loading { display: inline-block; width: 20px; height: 20px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.8s linear infinite; margin-left: 8px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .error-message { color: #dc2626; margin-top: 12px; font-size: 14px; }
         .success-message { color: #16a34a; margin-top: 12px; font-size: 14px; }
-        .footer { margin-top: 24px; text-align: center; color: #64748b; font-size: 13px; }
+        .footer { margin-top: 24px; text-align: center; color: #64748b; font-size: 13px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; }
         .footer a { color: #2563eb; text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
         .email-section {
             margin-top: 40px;
             padding-top: 30px;
@@ -126,6 +125,7 @@
         .email-form button { width: auto; padding: 12px 24px; }
         @media (max-width: 600px) {
             .email-form { flex-direction: column; }
+            .footer { flex-direction: column; gap: 4px; }
         }
         .technique-hint {
             font-size: 13px;
@@ -213,12 +213,42 @@
             font-family: monospace;
             font-size: 12px;
         }
+
+        /* Feedback Modal */
+        .feedback-modal {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            display: none;
+        }
+        .feedback-modal textarea {
+            min-height: 100px;
+            margin-bottom: 16px;
+        }
+        .feedback-modal .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+        .feedback-modal .button-group button {
+            width: auto;
+            padding: 10px 20px;
+        }
+        .feedback-modal .cancel-btn {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        .feedback-modal .cancel-btn:hover {
+            background: #cbd5e1;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🧠 VeritasPrompt</h1>
-        <p class="tagline">VeritasPrompt. Turning vague research curiosity into rigorous, safe academic outputs.</p>
+        <p class="tagline">Turning vague research curiosity into rigorous, safe academic outputs.</p>
         
         <!-- Collapsible Help Section -->
         <details class="help-accordion">
@@ -326,8 +356,25 @@
             <div id="subscribeMessage" class="success-message"></div>
         </div>
 
+        <!-- Feedback Section (collapsible) -->
+        <div class="feedback-modal" id="feedbackModal">
+            <h3 style="margin-top: 0; color: #1e293b;">📝 Share your feedback</h3>
+            <p style="color: #64748b; margin-bottom: 16px;">What worked well? What could be improved? Your input shapes VeritasPrompt.</p>
+            <form name="feedback" method="POST" data-netlify="true" id="feedbackForm">
+                <input type="hidden" name="form-name" value="feedback" />
+                <textarea name="message" id="feedbackMessage" placeholder="e.g., 'I'd love a dark mode' or 'The gap analysis prompt was spot on.'" required></textarea>
+                <div class="button-group">
+                    <button type="button" class="cancel-btn" id="closeFeedbackBtn">Cancel</button>
+                    <button type="submit" id="submitFeedbackBtn">Send Feedback</button>
+                </div>
+            </form>
+            <div id="feedbackSuccessMessage" class="success-message" style="margin-top: 16px;"></div>
+        </div>
+
         <div class="footer">
-            VeritasPrompt · Researcher-crafted cognitive scaffolds & safety protocols
+            <span>VeritasPrompt · Researcher-crafted cognitive scaffolds & safety protocols (C) 2026</span>
+            <span>·</span>
+            <a href="#" id="showFeedbackLink">📝 Send feedback</a>
         </div>
     </div>
 
@@ -352,6 +399,56 @@
         const emailInput = document.getElementById('emailInput');
         const subscribeBtn = document.getElementById('subscribeBtn');
         const subscribeMessage = document.getElementById('subscribeMessage');
+
+        // Feedback elements
+        const showFeedbackLink = document.getElementById('showFeedbackLink');
+        const feedbackModal = document.getElementById('feedbackModal');
+        const closeFeedbackBtn = document.getElementById('closeFeedbackBtn');
+        const feedbackForm = document.getElementById('feedbackForm');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        const feedbackSuccessMessage = document.getElementById('feedbackSuccessMessage');
+
+        // Show/hide feedback modal
+        showFeedbackLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            feedbackModal.style.display = 'block';
+            feedbackSuccessMessage.textContent = '';
+            feedbackMessage.value = '';
+        });
+
+        closeFeedbackBtn.addEventListener('click', () => {
+            feedbackModal.style.display = 'none';
+        });
+
+        // Handle feedback form submission (AJAX to Netlify)
+        feedbackForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = feedbackMessage.value.trim();
+            if (!message) {
+                feedbackSuccessMessage.textContent = 'Please enter a message.';
+                feedbackSuccessMessage.style.color = '#dc2626';
+                return;
+            }
+
+            const formData = new FormData(feedbackForm);
+            try {
+                await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(formData).toString()
+                });
+                feedbackSuccessMessage.textContent = '✅ Thanks! Your feedback has been sent.';
+                feedbackSuccessMessage.style.color = '#16a34a';
+                feedbackMessage.value = '';
+                // Optionally close after 2 seconds
+                setTimeout(() => {
+                    feedbackModal.style.display = 'none';
+                }, 2000);
+            } catch (err) {
+                feedbackSuccessMessage.textContent = 'Error sending feedback. Please try again.';
+                feedbackSuccessMessage.style.color = '#dc2626';
+            }
+        });
 
         // Detailed hints for each prompt type
         const techniqueHints = {
@@ -493,14 +590,11 @@
                 return;
             }
 
-            // Umami Cloud custom event tracking (robust version)
+            // Umami Cloud custom event tracking (basic, properties may not show due to version differences)
             if (typeof umami !== 'undefined') {
                 const trackFn = umami.track || umami.trackEvent;
                 if (trackFn) {
-                    trackFn('Generate Prompt', {
-                        discipline: field,
-                        promptType: promptType
-                    });
+                    trackFn('Generate Prompt', { discipline: field, promptType: promptType });
                 }
             }
 
@@ -552,8 +646,6 @@
         topicInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && e.ctrlKey) generatePrompt();
         });
-
-        // Email AJAX is commented out; native Netlify Forms used.
     </script>
 </body>
 </html>
