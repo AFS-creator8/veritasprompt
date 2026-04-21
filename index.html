@@ -494,11 +494,15 @@
             }
 
             // Umami Cloud custom event tracking
-            if (window.umami) {
-                umami.track('Generate Prompt', {
-                    discipline: field,
-                    promptType: promptType
+            if (typeof umami !== 'undefined') {
+                const trackFn = umami.track || umami.trackEvent;
+                    if (trackFn) {
+                     trackFn('Generate Prompt', {
+                     discipline: field,
+                        promptType: promptType
                 });
+    }
+}
             }
 
             errorDiv.textContent = '';
